@@ -1,0 +1,60 @@
+programme:txt 
+    | txt programme 
+    | dumbo_bloc 
+    | dumbo_bloc programme
+
+txt: /[a-zA-Z0-9;&<>”_−.\/:, \n]+/
+
+dumbo_bloc: "{{" expression_list "}}"
+
+expression_list: expression ";" expression_list
+    |expression ";"
+
+expression:"print" string_expression 
+    |for
+    |if
+    |variable ":=" integer
+    |variable ":=" string_expression
+    |variable ":=" string_list
+
+if: "if" boolean "do" expression_list "endif"
+for:"for" variable "in" string_list "do" expression_list "endfor"
+    |"for" variable "in" variable "do" expression_list "endfor"
+
+string_expression: string 
+    | variable
+    | string_expression "." string_expression
+    
+string_list: "(" string_list_interior ")"
+
+string_list_interior: string 
+    | string "," string_list_interior
+
+variable: /[a-zA-Z0-9_]+/
+string: "'" /[a-zA-Z0-9;&<>"_−.\/:, \n]+/ "'"
+
+mult:"*"
+plus:"+"
+minus:"-"
+div:"/"  
+
+op: mult|plus|minus|div
+integer: integer op integer
+    | variable op integer
+    | integer op variable
+    | /[0-9]+/
+
+
+comp: "<"|">"|"="|"!="
+boolean: true|false|or|and
+    | integer comp integer
+    | variable comp variable
+
+or: boolean "or" boolean 
+and: boolean "and" boolean
+
+true: "true"
+false: "false"
+
+%import common.WS
+%ignore WS
