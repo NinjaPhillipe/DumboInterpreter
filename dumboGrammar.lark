@@ -10,12 +10,14 @@ dumbo_bloc: "{{" expression_list "}}"
 expression_list: expression ";" expression_list
     |expression ";"
 
-expression:"print" string_expression 
+expression: print
     |for
     |if
     |variable ":=" integer
     |variable ":=" string_expression
     |variable ":=" string_list
+
+print:"print" string_expression 
 
 if: "if" boolean "do" expression_list "endif"
 for:"for" variable "in" string_list "do" expression_list "endfor"
