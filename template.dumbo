@@ -2,8 +2,12 @@
     <head><title >{{ print nom . ' ' . prenom ; }}</title></head>
     <body>
     <h1>{{ print nom . ' ' . prenom ; }}</h1>
-    Cours : {{ for c in cours do
+    Cours : {{ for c in ('ok','poo') do
                 print c . ' , ' ;
                 endfor ; }}
     </body>
+    {{ for c in cours do
+                print c . ' , ' ;
+                endfor ; }}
 </html>
+{{ if ( 2 + 10 ) > 7 do print 'caca'; endif; }}

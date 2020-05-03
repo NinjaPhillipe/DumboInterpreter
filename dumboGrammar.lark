@@ -40,17 +40,26 @@ plus:"+"
 minus:"-"
 div:"/"  
 
+int: /[0-9]+/
+
 op: mult|plus|minus|div
-integer: integer op integer
+integer: "(" integer op integer ")"
     | variable op integer
     | integer op variable
-    | /[0-9]+/
+    | int
 
 
-comp: "<"|">"|"="|"!="
-boolean: true|false|or|and
+
+greater: ">"
+nequal: "!="
+less: "<"
+equals: "="
+comp: greater|nequal|less|equals
+boolean: or|and
     | integer comp integer
     | variable comp variable
+    | integer comp variable
+    | variable comp integer
 
 or: boolean "or" boolean 
 and: boolean "and" boolean

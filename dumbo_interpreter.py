@@ -9,7 +9,8 @@ logging.basicConfig(level=logging.DEBUG)
 
 dic= {}
 
-def getStringInterior(tree,tmp = []):
+def getStringInterior(tree,tmp):
+    print(" add "+tree.children[0].children[0].value)
     tmp.append(tree.children[0].children[0].value)
     if(len(tree.children)==2):
         getStringInterior(tree.children[1],tmp)
@@ -28,14 +29,13 @@ def getVar(tree):
             return getVar(tree.children[0])
     elif(tree.data == "integer"):
 
-        print("INTEGER NOT YET IMPLEMENTED")
         print(tree.children)
         return (tree.children[0])
         
         
         
     elif(tree.data == "string_list"):
-        return getStringInterior(tree.children[0])
+        return getStringInterior(tree.children[0],[])
     return "ERROR"
 
 # def getValue(tree):
@@ -44,7 +44,7 @@ def getValue(variable):
     return dic[variable]
 
 def executeFor(tree,file):
-    if(tree.children[0].data == "variable" ):   
+    if(tree.data == "for" ):   
         # tokken where it symbol is stocked  
         tokkenIT = tree.children[0].children[0]
         
@@ -56,7 +56,10 @@ def executeFor(tree,file):
         if(tree.children[1].data == "variable" ):
             ot = getValue(tree.children[1].children[0])
         elif (tree.children[1].data == "string_list" ):
-            print("STRING LIST FOR NOT YET IMPLEMENTED")
+            print("pipi -------")
+            ot = getStringInterior(tree.children[1].children[0],[])
+            print("pipi ------- "+ str(ot))
+            # print("STRING LIST FOR NOT YET IMPLEMENTED")
         
         for it in ot:
             dic[tokkenIT] = it
@@ -68,6 +71,71 @@ def executeFor(tree,file):
             dic[tokkenIT] = tmp
         else:
             dic.pop(tokkenIT)
+    else:
+        print("Incorrect for ")
+
+def evalInteger(tree):
+    if(len(tree.children) == 1):
+        return int(tree.children[0].children[0].value)
+    
+    if(tree.children[0].data == "integer"):
+        var1 = evalInteger(tree.children[0])
+
+    if(tree.children[2].data == "integer"):
+        var2 = evalInteger(tree.children[2])
+
+    # faire cas variable
+
+    if(tree.children[1].children[0].data == "mult"):
+        return var1 * var2
+    elif(tree.children[1].children[0].data == "plus"):
+        return var1 + var2
+    elif(tree.children[1].children[0].data == "div"):
+        return var1 / var2
+    elif(tree.children[1].children[0].data == "minus"):
+        return var1 - var2
+
+    print("INTERDIT")
+
+def evalBoolean(tree):
+    if (tree.children[0].data == "or"):
+        return evalBoolean(tree.children[0].children[0]) or evalBoolean(tree.children[0].children[1])
+
+    if (tree.children[0].data) == "and":
+        return evalBoolean(tree.children[0].children[0]) and evalBoolean(tree.children[0].children[1])
+    if(tree.children[0].data == "integer"):
+        var1 = evalInteger(tree.children[0])
+    elif(tree.children[0].data == "variable"):
+        print(getValue(tree.children[0].children[0]))
+        var1 = getValue(tree.children[0].children[0].value)
+
+
+    if(tree.children[2].data == "integer"):
+        var2 = evalInteger(tree.children[2])
+    elif(tree.children[2].data == "variable"):
+        print(getValue(tree.children[2].children[0]))
+        var2 = getValue(tree.children[2].children[0].value)
+
+    
+
+
+    if(tree.children[1].children[0].data == "greater"):
+
+        return var1 > var2
+    if(tree.children[1].children[0].data == "less"):
+        return var1 < var2
+    if(tree.children[1].children[0].data == "equals"):
+        return var1 == var2
+    if(tree.children[1].children[0].data == "nequal"):
+        return var1 != var2
+
+    print("NE DOIT PAS ETRE LA ")
+    return False
+
+def executeIf(tree,file):
+    if(evalBoolean(tree.children[0])):
+        explore(tree.children[1],file)
+
 
 def explore(racine,file_out):
     print(racine.data)
@@ -96,7 +164,7 @@ def explore(racine,file_out):
                 file_out.write(getVar(racine.children[0].children[0]) )
                 
         elif(racine.children[0].data == "if"):
-            return 0
+            executeIf(racine.children[0],file_out)
         elif(racine.children[0].data == "for"):
             executeFor(racine.children[0],file_out)
         elif(racine.children[0].data == "variable"):
@@ -147,6 +215,6 @@ if(__name__=="__main__"):
     print("prenom = "+str(dic["prenom"]))
     print("cours = "+str(dic["cours"]))
     print("lol = "+str(dic["lol"]))
+    print("mdr = "+str(dic["mdr"]))
 
     # Tree(op, [Tree(plus, [])])
-
