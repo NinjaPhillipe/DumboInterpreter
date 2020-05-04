@@ -1,0 +1,5 @@
+{{
+    liste_photo := ( 'Henry' , 'Connard2' , 'Aurelien' , 'Salop de pauvres.' );
+    nom := 'Edouard';
+    
+}}

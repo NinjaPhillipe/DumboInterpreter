@@ -10,4 +10,4 @@
                 print c . ' , ' ;
                 endfor ; }}
 </html>
-{{ if ( 2 + 10 ) > 7 do print 'caca'; endif; }}
+{{ if (2>1 and (3>2 or 56<5 ))do print 'caca'; endif; }}

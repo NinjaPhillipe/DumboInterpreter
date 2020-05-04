@@ -3,14 +3,14 @@
     <body>
         <h1>{{ print nom ; }}</h1>
     {{
-        i := 0
-        for nom in liste photo do
-            print ’<ahref=” ’.nom.’”>’ .nom.’</a>’;
+        i := 0;
+        for nom in liste_photo do
+            print '<ahref="' . nom .'">' .nom.'</a>';
             i:= i+1;
         endfor;
     }}
     <br />
     <br />
-    Il y a {{ print i; }} dans l album {{ print nom ; } } .
+    Il y a {{ print i; }} dans l album {{ print nom ; }} .
     </body>
 </html>
